@@ -10,30 +10,30 @@ from email.mime.multipart import MIMEMultipart
 # -----------------------------------------------
 # Scraping Setup
 # -----------------------------------------------
-keywords = [
-    'ai', 'artificial intelligence', 'fashion', 'retail', 'creative technology',
-    'fashion innovation', 'ml', 'machine learning', 'generative ai', 'gan ai',
-    'comfy ui', '2d to 3d', 'text to 3d', 'technology conferences', 'garment',
-    'clothing', 'technology and design', 'fashion design', 'creative computing'
-]
-
-base_url = "https://heatherbcooper.substack.com/"
+keywords= ['ai','artificial intelligence','fashion','retail','creative technology', 'fashion innovation', 'ml', 'machine learning', 'generative ai', 'gan ai', 'comfy ui', '2d to 3d', 'text to 3d', 'technology conferences', 'garment', 'clothing', 'technology and design', 'fashion design', 'creative computing' ]
+base_url = "https://heatherbcooper.substack.com/ "
 headers = {'User-Agent': 'Mozilla/5.0'}
 
 response = requests.get(base_url, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
 urls = []
+
 for link in soup.find_all('a', href=True):
     href = link['href']
+
     if href.endswith('/comments'):
         continue
 
     if any(re.search(rf'\b{re.escape(keyword)}\b', href, re.IGNORECASE) for keyword in keywords):
-        full_url = href if href.startswith('http') else base_url.rstrip('/') + '/' + href.lstrip('/')
-        urls.append(full_url)
+        if href.startswith('http'):
+            urls.append(href)
+        else:
+            urls.append(base_url.rstrip('/') + '/' + href.lstrip('/'))
 
-urls = list(set(urls))  # Remove duplicates
+urls = list(set(urls))
+
+print(urls)
 
 # -----------------------------------------------
 # Article Previews
@@ -42,7 +42,7 @@ previews = []
 
 for article in tqdm(urls, desc="Scraping articles"):
     try:
-        data = requests.get(article, headers=headers)
+        data = requests.get(article, headers=headers, timeout=10)
         soup = BeautifulSoup(data.content, 'html.parser')
 
         # Extract title
@@ -69,7 +69,8 @@ for article in tqdm(urls, desc="Scraping articles"):
         previews.append({
             'title': title,
             'subtitle': subtitle,
-            'image': image if image else "No Relevant Image Found"
+            'image': image if image else "No Relevant Image Found",
+            'url': article
         })
 
     except Exception as e:
@@ -94,7 +95,7 @@ html_start = str(soup).split(str(article_template))[0].replace('\n', '')
 html_end = str(soup).split(str(article_template))[1].replace('\n', '')
 
 newsletter_content = ""
-for i, article in enumerate(previews):
+for article in previews:
     try:
         # Update image
         img = article_template.find('img')
@@ -114,7 +115,7 @@ for i, article in enumerate(previews):
         # Update link
         link = article_template.find('a')
         if link:
-            link['href'] = urls[i]
+            link['href'] = article['url']
             link.string = "Read more"
 
         newsletter_content += str(article_template).replace('\n', '')
