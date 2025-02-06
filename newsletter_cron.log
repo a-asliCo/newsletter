@@ -1,0 +1,11 @@
+Scraping articles: 0it [00:00, ?it/s]Scraping articles: 0it [00:00, ?it/s]
+Traceback (most recent call last):
+  File "/Users/ayseasliilhan/Desktop/newsletter/fia-newsletter.py", line 87, in <module>
+    raise FileNotFoundError(f"Template file '{template_path}' not found.")
+FileNotFoundError: Template file 'email.html' not found.
+Scraping articles: 0it [00:00, ?it/s]Scraping articles: 0it [00:00, ?it/s]
+✅ HTML saved successfully: src/index.html
+✅ Email sent successfully!
+Scraping articles: 0it [00:00, ?it/s]Scraping articles: 0it [00:00, ?it/s]
+✅ HTML saved successfully: src/index.html
+✅ Email sent successfully!
