@@ -4,33 +4,103 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FIA Newsletter</title>
-    <link rel="stylesheet" href="/Users/ayseasliilhan/Desktop/newsletter/fia-newsletter/src/style.css">
+    <link rel="stylesheet" href="src/style.css">
   </head>
   <body>
     
-    <section class="landing-page">
-      <img src="https://github.com/a-asliCo/newsletter/blob/main/fia-newsletter/src/img/screen-pic.png" alt="screen-pic"/>
+    <!-- Hero Section -->
+    <section class="image-container">
+      <img class="screen-pic" src="src/img/screen-pic.png" alt="screen-pic"/>
     </section>
 
-    <section class="section">
-      <div class="columns">
-        <div class="column is-one-fifth">
-          <img
-            src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80"
-            alt="article_pic"
-          />
+    <!-- Scroll Trigger -->
+    <div class="bottom-hover"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="content-wrapper">
+      
+      <!-- First Column (Heading + News Feed) -->
+      <div class="column">
+        <div class="box heading-box">
+          <h1 class="title">FIA Newsletter</h1>
         </div>
-        <div class="column">
-          <h1 class="title">Lorem Ipsum</h1>
-          <p class="subtitle">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s
-          </p>
-          <a href="https://lipsum.com">https://lipsum.com</a>
+
+        <div class="box news-feed">
+          <h2 class="section-title">News Feed</h2>
+          <div class="scrollable-content">
+            <section class="section">
+              <div class="columns">
+                <div class="column is-one-fifth">
+                  <img class="article_pic" src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80"
+                       alt="article_pic" />
+                </div>
+                <div class="column">
+                  <h1 class="title">Lorem Ipsum</h1>
+                  <p class="subtitle">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </p>
+                  <a href="https://lipsum.com">https://lipsum.com</a>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
       </div>
-    </section>
-    <script src="/Users/ayseasliilhan/Desktop/newsletter/fia-newsletter/src/main.js"></script>
+
+      <!-- Second Column (Longer Readings & GitHub Repos) -->
+      <div class="column">
+        <div class="box longer-readings">
+          <h2 class="section-title">Longer Readings</h2>
+          <div class="scrollable-content">
+            <section class="section">
+              <div class="columns">
+                <div class="column is-one-fifth">
+                  <img src="https://via.placeholder.com/150" alt="long_read_pic" />
+                </div>
+                <div class="column">
+                  <h1 class="title">Longer Reading Title</h1>
+                  <p class="subtitle">
+                    This section will hold longer reading materials.
+                  </p>
+                  <a href="#">Read more</a>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- Third Column (Community & Socials) -->
+      <div class="column">
+        <div class="box community">
+          <h2 class="section-title">Community & Updates</h2>
+          <div class="scrollable-content">
+            <section class="section">
+              <div class="columns">
+                <div class="column is-one-fifth">
+                  <img src="https://via.placeholder.com/150" alt="community_pic" />
+                </div>
+                <div class="column">
+                  <h1 class="title">Community Events</h1>
+                  <p class="subtitle">
+                    Updates and social events from the community.
+                  </p>
+                  <a href="#">View Events</a>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <img src="src/img/footer-image.png" alt="Footer Image" class="footer-image">
+      <p class="engagement-text">Join the FIA Community – Stay Inspired!</p>
+    </footer>
+
+    <script src="src/main.js"></script>
   </body>
 </html>

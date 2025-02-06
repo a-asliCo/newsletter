@@ -5,92 +5,134 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #000;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+  /* Remove any default margins */
   margin: 0;
+  padding: 0;
+  overflow-x: hidden;  /* Prevent horizontal scrolling */
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent unwanted horizontal scroll */
+  width: 100vw; /* Ensures full viewport width */
+}
+
+.image-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh; /* Adjust based on how much of the screen it should cover */
+  overflow: hidden;
+}
+
+.screen-pic {
+  width: 100%;
+  max-width: 100vw;
+  object-fit: cover;
+}
+
+.image-container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none; /* Ensure it does not block interactions */
+}
+
+.bottom-hover {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 10%;
+  cursor: url('./img/cursor-3.cur'), pointer;
+  z-index: 999;
+}
+
+.bottom-hover:active {
+  opacity: 0.7;
+}
+
+/* Main Content Layout - Responsive */
+.content-wrapper {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: space-between;
+  padding: 40px;
+  max-width: 1600px;
+  margin: auto;
+  gap: 120px;
+  flex-wrap: wrap; /* Allows wrapping for smaller screens */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Columns */
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 300px; /* Ensures adaptability */
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* General Box Style */
+.box {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+/* News Feed, Longer Readings, and Community */
+.news-feed, .longer-readings, .community {
+  height: 150vh; /* 1.5 times the window height */
+  position: relative;
+}
+
+/* Scrollable Content Inside Boxes */
+.scrollable-content {
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+}
+
+/* Footer */
+.footer {
+  width: 100%;
   text-align: center;
+  padding: 50px 0;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+.footer-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
 }
 
-.card {
-  padding: 2em;
+.engagement-text {
+  font-size: 20px;
+  margin-top: 10px;
+  color: white;
 }
 
-.read-the-docs {
-  color: #888;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* 📱 Mobile Responsiveness (Stacking Columns) */
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column; /* Stack columns vertically */
+    align-items: center;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+
+  .column {
+    width: 100%;
   }
 }
