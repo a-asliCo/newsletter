@@ -1,34 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=PX+Grotesk:wght@400;700&display=swap');
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'PX Grotesk', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #000;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* Remove any default margins */
   margin: 0;
   padding: 0;
-  overflow-x: hidden;  /* Prevent horizontal scrolling */
+  overflow-x: hidden;
 }
 
 body, html {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent unwanted horizontal scroll */
-  width: 100vw; /* Ensures full viewport width */
+  overflow-x: hidden;
+  width: 100vw;
 }
 
 .image-container {
   position: relative;
   width: 100vw;
-  height: 100vh; /* Adjust based on how much of the screen it should cover */
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -46,7 +45,7 @@ body, html {
   width: 100%;
   height: 40%;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
-  pointer-events: none; /* Ensure it does not block interactions */
+  pointer-events: none;
 }
 
 .bottom-hover {
@@ -63,7 +62,6 @@ body, html {
   opacity: 0.7;
 }
 
-/* Main Content Layout - Responsive */
 .content-wrapper {
   display: flex;
   justify-content: space-between;
@@ -71,34 +69,103 @@ body, html {
   max-width: 1600px;
   margin: auto;
   gap: 120px;
-  flex-wrap: wrap; /* Allows wrapping for smaller screens */
+  flex-wrap: wrap;
 }
 
-/* Columns */
+/* Adjust the columns layout for better spacing */
+.columns {
+  display: flex;
+  
+  align-items: center; /* Align items vertically */
+  flex-wrap: wrap; /* Ensure responsiveness */
+}
+
+/* Increase Image Size */
+.article_pic{
+  width: 380px; /* Adjusted size */
+  height: auto;
+  max-width: 100%; /* Ensures it doesn't exceed its container */
+  border-radius: 8px; /* Optional: Add rounded corners */
+
+   /* Add a thick frame */
+   border-left: 5px solid #fff083;
+   border-right: 5px solid #fff083;
+   border-bottom: 5px solid #fff083;
+   border-top: 5px solid #fff083;
+}
+
+/* Increase Image Size */
+.long_read_pic {
+  width: 380px; /* Adjusted size */
+  height: auto;
+  max-width: 100%; /* Ensures it doesn't exceed its container */
+  border-radius: 8px; /* Optional: Add rounded corners */
+
+   /* Add a thick frame */
+   border-left: 5px solid #ffc3e1;
+   border-right: 5px solid #ffc3e1;
+   border-bottom: 5px solid #ffc3e1;
+   border-top: 5px solid #ffc3e1;
+}
+
 .column {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  min-width: 300px; /* Ensures adaptability */
+  gap: 40px;
+  min-width: 300px;
 }
 
-/* General Box Style */
+.title, .subtitle {
+  margin-top: -20px;
+}
+
+.link {
+  margin-top: -40px;
+  color: #6fa148;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
 .box {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 20px;
   backdrop-filter: blur(10px);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  text-align: center; /* Ensure text is also centered */
 }
 
-/* News Feed, Longer Readings, and Community */
+.content-search {
+  background: #ed5b2a;
+  color: #7a00ff;
+}
+
+.engagement-box {
+  background: #0080fe;
+}
+
+/* Ensure images in news-feed, longer-readings, and community remain centered */
+.box img {
+  margin: 0 auto; /* Center images */
+  display: block; /* Ensure block-level alignment */
+}
+
+/* Center links and subtitles */
+.box a, 
+.box .subtitle {
+  text-align: center;
+}
+
 .news-feed, .longer-readings, .community {
-  height: 150vh; /* 1.5 times the window height */
+  height: 150vh;
   position: relative;
 }
 
-/* Scrollable Content Inside Boxes */
 .scrollable-content {
   height: 100%;
   overflow-y: auto;
@@ -106,7 +173,6 @@ body, html {
   scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
 }
 
-/* Footer */
 .footer {
   width: 100%;
   text-align: center;
@@ -125,14 +191,66 @@ body, html {
   color: white;
 }
 
-/* 📱 Mobile Responsiveness (Stacking Columns) */
+.heading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.heading-box .title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-main {
+  color: white;
+  margin: 0;
+}
+
+.title-holder {
+  width: auto;
+  height: 70px;
+}
+
+.last-updated {
+  margin: 0;
+}
+
+.last-updated span {
+  color: #fde522;
+}
+
+.news-feed .section-title {
+  color: #f7c4df;
+}
+
+.longer-readings .section-title {
+  color: #2a61f7;
+}
+
+.community .section-title {
+  color: #ed5b2a;
+}
+
 @media (max-width: 768px) {
   .content-wrapper {
-    flex-direction: column; /* Stack columns vertically */
+    flex-direction: column;
     align-items: center;
   }
 
   .column {
     width: 100%;
+    text-align: center;
+  }
+
+  .columns {
+    flex-direction: column; /* Stack image and text on mobile */
+    align-items: center; /* Center align for mobile */
+  }
+
+  .article_pic, .long_read_pic {
+    width: 100px; /* Slightly smaller for mobile */
   }
 }

@@ -26,3 +26,22 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("👋 Cursor left the bottom-hover area.");
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const lastUpdatedElement = document.querySelector(".last-updated");
+
+    if (lastUpdatedElement) {
+        // Get the last modified date of the HTML file
+        const lastModified = new Date(document.lastModified);
+        
+        // Format the date (e.g., 07 Feb. 2025)
+        const formattedDate = lastModified.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+
+        // Update the text content with <span> for styling
+        lastUpdatedElement.innerHTML = `Last Updated: <span>${formattedDate}</span>`;
+    }
+});
