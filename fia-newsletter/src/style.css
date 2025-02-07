@@ -243,8 +243,9 @@ body, html {
   }
 
   .screen-pic {
-    height: auto; /* Allow natural aspect ratio on mobile */
+    content: url('./src/img/mobile.png'); /* Change image on mobile */
     max-height: 90vh; /* Prevents overflow */
+    object-fit: contain; /* Ensure full image is visible */
   }
 
   .column {
