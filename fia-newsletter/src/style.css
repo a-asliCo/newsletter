@@ -243,7 +243,7 @@ body, html {
   }
 
   .screen-pic {
-    content: url('./src/img/mobile.png'); /* Change image on mobile */
+    content: url('/src/img/mobile.png'); /* Change image on mobile */
     max-height: 90vh; /* Prevents overflow */
     object-fit: contain; /* Ensure full image is visible */
   }
