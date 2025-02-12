@@ -430,50 +430,40 @@ body, html {
   display: grid;
 }
 
-/* Search Input */
 .search-input {
-  width: 90%;
-  padding: 12px;
+  width: 100%;
+  padding: 10px;
   font-size: 16px;
-  border-radius: 8px;
-  border: 2px solid #7a00ff;
+  border-radius: 5px;
+  border: 1px solid #fff083;
   background: rgba(255, 255, 255, 0.1);
   color: white;
-  outline: none;
-  text-align: center;
-  margin: 10px auto;
-  display: block;
-  max-width: 500px;
 }
 
 .search-input::placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Search Results */
-.search-results {
-  margin-top: 15px;
+#search-results {
+  display: none;
   max-height: 250px;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Search Result Item */
-.search-result-item {
+  margin-top: 10px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  padding: 12px;
-  width: 90%;
-  max-width: 600px;
-  margin: 5px 0;
-  text-align: center;
-  transition: transform 0.2s ease-in-out;
+  padding: 10px;
 }
+
+.search-result-item {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.search-result-item a {
+  color: #f7c4df;
+  font-weight: bold;
+}
+
 
 .search-result-item:hover {
   transform: scale(1.02);
