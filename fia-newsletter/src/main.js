@@ -45,3 +45,83 @@ document.addEventListener("DOMContentLoaded", function () {
         lastUpdatedElement.innerHTML = `Last Updated: <span>${formattedDate}</span>`;
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Select elements
+    const socialLinks = document.querySelectorAll(".socials a");
+    const searchBar = document.querySelector(".search-input"); // Assuming there's an input field for search
+    const heatmapButton = document.getElementById("heatmap-btn");
+
+    // Load stored counts
+    let socialClicks = parseInt(localStorage.getItem("socialClicks")) || 0;
+    let searchCount = parseInt(localStorage.getItem("searchCount")) || 0;
+    let visitCount = parseInt(localStorage.getItem("visitCount")) || 0;
+
+    // Update display
+    document.getElementById("social-clicks").innerText = socialClicks;
+    document.getElementById("search-count").innerText = searchCount;
+    document.getElementById("visit-count").innerText = visitCount;
+
+    // Track social link clicks
+    socialLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            socialClicks++;
+            localStorage.setItem("socialClicks", socialClicks);
+            document.getElementById("social-clicks").innerText = socialClicks;
+        });
+    });
+
+    // Track searches
+    if (searchBar) {
+        searchBar.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && searchBar.value.trim() !== "") {
+                searchCount++;
+                localStorage.setItem("searchCount", searchCount);
+                document.getElementById("search-count").innerText = searchCount;
+            }
+        });
+    }
+
+    // Track website visits
+    visitCount++;
+    localStorage.setItem("visitCount", visitCount);
+    document.getElementById("visit-count").innerText = visitCount;
+
+    // Show heatmap when button is clicked
+    heatmapButton.addEventListener("click", function () {
+        alert("🔴 Click Heatmap feature coming soon!");
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+    const articles = document.querySelectorAll(".news-feed .columns");
+
+    searchInput.addEventListener("input", function () {
+        const query = searchInput.value.toLowerCase();
+
+        searchResults.innerHTML = ""; // Clear previous results
+
+        articles.forEach(article => {
+            const title = article.querySelector(".title")?.textContent.toLowerCase() || "";
+            const subtitle = article.querySelector(".subtitle")?.textContent.toLowerCase() || "";
+            const link = article.querySelector(".link")?.href || "#";
+
+            if (title.includes(query) || subtitle.includes(query)) {
+                const resultItem = document.createElement("div");
+                resultItem.classList.add("search-result-item");
+                resultItem.innerHTML = `
+                    <h3 class="title search-highlight">${title}</h3>
+                    <p class="subtitle search-highlight">${subtitle}</p>
+                    <a href="${link}" class="link">Read more →</a>
+                `;
+                searchResults.appendChild(resultItem);
+            }
+        });
+
+        if (!searchResults.innerHTML) {
+            searchResults.innerHTML = "<p style='color:white;'>No matching articles found.</p>";
+        }
+    });
+});

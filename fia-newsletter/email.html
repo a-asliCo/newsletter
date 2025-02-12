@@ -86,17 +86,13 @@
           <div class="scrollable-content">
            <section class="section">
             <div class="columns">
-             <div class="column is-one-fifth">
-              <img alt="long_read_pic" src="https://via.placeholder.com/150"/>
-             </div>
+             
              <div class="column">
-              <h1 class="title">
-              </h1>
-              <p class="subtitle">
-              </p>
-              <a class="link" href="#">
-               Read more ->>
-              </a>
+              <input type="text" id="search-input" class="search-input" placeholder="Search articles...">
+  <div id="search-results" class="scrollable-content">
+    <!-- Matching results will appear here -->
+  </div>
+              
              </div>
             </div>
            </section>
@@ -114,12 +110,25 @@
             <section class="section">
              <div class="columns">
               <div class="column">
-               <h1>
-                Community Events
-               </h1>
-               <p>
-                Updates and social events from the community.
-               </p>
+                <div class="eventContainer">
+                  <img src="./src/img/s1.jpg" class="socials1" />
+                  <img src="./src/img/s2.jpg" class="socials2" />
+                  <img src="./src/img/s3.jpg" class="socials3" />
+                  <img src="./src/img/s4.jpg" class="socials4" />
+              </div>
+
+              <div class="team-container">
+                  <h1> OUR TEAM;</h1>
+                    <img class="m" src="./src/img/m.png" />
+                    <img class="l" src="./src/img/l.png" />
+                    <img class="mo" src="./src/img/mo.png" />
+                    <img class="c" src="./src/img/c.png" />
+                    <img class="e" src="./src/img/e.png" />
+                  <div class="interns-grid">
+                      <img class="t" src="./src/img/t.png" />
+                      <img class="a" src="./src/img/a.png" />
+                  </div>
+              </div>
               </div>
              </div>
             </section>
@@ -127,37 +136,44 @@
         </div>
 
         <div class="box engagement-box">
-          <h1 class="section-title">
-           ENGAGEMENT ANALYTICS;
-          </h1>
-          <div class="scrollable-content">
-           <section class="section">
+    <h1 class="section-title">
+        ENGAGEMENT ANALYTICS;
+    </h1>
+        <section class="section">
             <div class="columns">
-             <div class="column is-one-fifth">
-              <img alt="long_read_pic" src="https://via.placeholder.com/150"/>
-             </div>
-             <div class="column">
-              <h1 class="title">
-              </h1>
-              <p class="subtitle">
-              </p>
-              <a class="link" href="#">
-               Read more ->>
-              </a>
-             </div>
+                <div class="column">
+                    <h2>🔗 Social Clicks:</h2>
+                    <p id="social-clicks">Loading...</p>
+
+                    <h2>🔍 Searches:</h2>
+                    <p id="search-count">Loading...</p>
+
+                    <h2>🌐 Website Visits:</h2>
+                    <p id="visit-count">Loading...</p>
+
+                    <button id="heatmap-btn">Show Clicks Heatmap</button>
+                </div>
             </div>
-           </section>
-          </div>
-         </div>
+        </section>
+</div>
       </div>
 
     </div>
 
     <!-- Footer Section -->
   <footer class="footer">
-    <img alt="Footer Image" class="footer-image" src="src/img/footer-image.png"/>
+    <h1 class="footer-header">Key Threads 🧵</h1>
+    <div class="footer-frame">
+      <img alt="Footer Image" class="footer-image-right" src="./src/img/right.png"/>
+      <img alt="Footer Image" class="footer-image-left" src="./src/img/left.png"/>
+    </div>
+    <div class="socials">
+      <a href="https://www.fialondon.com/" >Website</a>
+      <a href="https://www.instagram.com/fashioninnovationagency/" >Instagram</a>
+      <a href="https://www.linkedin.com/company/fashioninnovationagency" >LinkedIn</a>
+      </div>
     <p class="engagement-text">
-     Join the FIA Community – Stay Inspired!
+     Powered by; Fashion Innovation Agency
     </p>
    </footer>
 
