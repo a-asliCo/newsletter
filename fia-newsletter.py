@@ -8,12 +8,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # -----------------------------------------------
-# Scraping Setup - News & Academic Papers
+# Scraping Setup - List of Websites
 # -----------------------------------------------
-news_sources = [
+websites = [
     "https://theresanaiforthat.com/s/fashion/",
     "https://bilawal.ai/",
     "https://heatherbcooper.substack.com/",
+    "https://www.spatialintelligence.ai/p/2025-the-year-imagination-becomes",  # Blocked
     "https://civitai.com/articles",
     "https://www.thecurrent.com/sections/retail",
     "https://www.businessoffashion.com/topics/technology/",
@@ -22,26 +23,11 @@ news_sources = [
     "https://www.wgsn.com/en/blog",
     "https://blog.wideeyes.ai/category/technology/",
     "https://wwd.com/business-news/technology/",
-    "https://www.wired.com/tag/ai/",
-    "https://www.technologyreview.com/topic/artificial-intelligence/",
-    "https://www.fastcompany.com/technology",
-    "https://www.forbes.com/innovation/",
-    "https://www.nytimes.com/section/technology",
-]
-
-academic_sources = [
-    "https://arxiv.org/list/cs.AI/recent",
-    "https://arxiv.org/list/cs.LG/recent",
-    "https://arxiv.org/list/cs.CV/recent",
-    "https://arxiv.org/list/cs.HC/recent",
-    "https://dl.acm.org/action/showMostCitedArticles",
-    "https://www.nature.com/subjects/artificial-intelligence",
-    "https://journals.sagepub.com/home/dsj",
-    "https://ieeexplore.ieee.org/Xplore/home.jsp",
 ]
 
 headers = {'User-Agent': 'Mozilla/5.0'}
 
+# Keywords for filtering relevant articles
 keywords = [
     'ai', 'artificial intelligence', 'fashion', 'retail', 'creative technology',
     'fashion innovation', 'ml', 'machine learning', 'generative ai', 'gan ai',
@@ -50,66 +36,63 @@ keywords = [
 ]
 
 # -----------------------------------------------
-# Scraping Function
+# Scraping Process
 # -----------------------------------------------
-def scrape_articles(sources):
-    urls = []
-    for website in sources:
-        try:
-            response = requests.get(website, headers=headers, timeout=10)
-            soup = BeautifulSoup(response.content, 'html.parser')
+urls = []
 
-            for link in soup.find_all('a', href=True):
-                href = link['href']
-                if href.endswith('/comments'):
-                    continue
+for website in websites:
+    try:
+        response = requests.get(website, headers=headers, timeout=10)
+        soup = BeautifulSoup(response.content, 'html.parser')
 
-                if any(re.search(rf'\b{re.escape(keyword)}\b', href, re.IGNORECASE) for keyword in keywords):
-                    full_url = href if href.startswith('http') else website.rstrip('/') + '/' + href.lstrip('/')
-                    urls.append(full_url)
+        for link in soup.find_all('a', href=True):
+            href = link['href']
 
-        except Exception as e:
-            print(f"⚠️ Error scraping {website}: {e}")
+            # Ignore comments links or unrelated pages
+            if href.endswith('/comments'):
+                continue
 
-    return list(set(urls))  # Remove duplicates
+            # Check if the URL contains any of the keywords
+            if any(re.search(rf'\b{re.escape(keyword)}\b', href, re.IGNORECASE) for keyword in keywords):
+                full_url = href if href.startswith('http') else website.rstrip('/') + '/' + href.lstrip('/')
+                urls.append(full_url)
 
-# -----------------------------------------------
-# Scraping News & Academic Papers
-# -----------------------------------------------
-news_urls = scrape_articles(news_sources)
-academic_urls = scrape_articles(academic_sources)
+    except Exception as e:
+        print(f"⚠️ Error scraping {website}: {e}")
 
-print(f"✅ Found {len(news_urls)} news articles.")
-print(f"✅ Found {len(academic_urls)} academic papers.")
+# Remove duplicate URLs
+urls = list(set(urls))
+print(f"✅ Found {len(urls)} articles.")
 
 # -----------------------------------------------
-# Extract Titles, Subtitles & Links
+# Article Previews (Text Only)
 # -----------------------------------------------
-def get_previews(urls):
-    previews = []
-    for article in tqdm(urls, desc="Scraping articles"):
-        try:
-            data = requests.get(article, headers=headers, timeout=10)
-            soup = BeautifulSoup(data.content, 'html.parser')
+previews = []
 
-            title_tag = soup.find(['h1', 'h2', 'h3'])
-            title = title_tag.text.strip() if title_tag else "No Title"
+for article in tqdm(urls, desc="Scraping articles"):
+    try:
+        data = requests.get(article, headers=headers, timeout=10)
+        soup = BeautifulSoup(data.content, 'html.parser')
 
-            subtitle_tag = soup.find(['h3', 'h4', 'p'])
-            subtitle = subtitle_tag.text.strip() if subtitle_tag else "No Subtitle"
+        # Extract title
+        title_tag = soup.find(['h1', 'h2', 'h3'])
+        title = title_tag.text.strip() if title_tag else "No Title"
 
-            previews.append({'title': title, 'subtitle': subtitle, 'url': article})
+        # Extract subtitle
+        subtitle_tag = soup.find(['h3', 'h4', 'p'])
+        subtitle = subtitle_tag.text.strip() if subtitle_tag else "No Subtitle"
 
-        except Exception as e:
-            print(f"⚠️ Error processing {article}: {e}")
-    
-    return previews
+        previews.append({
+            'title': title,
+            'subtitle': subtitle,
+            'url': article
+        })
 
-news_previews = get_previews(news_urls)
-academic_previews = get_previews(academic_urls)
+    except Exception as e:
+        print(f"⚠️ Error processing {article}: {e}")
 
 # -----------------------------------------------
-# HTML Generation (Preserving Structure)
+# HTML Generation (Without Images)
 # -----------------------------------------------
 template_path = "/Users/ayseasliilhan/Desktop/newsletter/email.html"
 
@@ -119,47 +102,47 @@ if os.path.exists(template_path):
 else:
     raise FileNotFoundError(f"Template file '{template_path}' not found.")
 
-news_section = soup.find('div', class_='news-feed').find('div', class_='scrollable-content')
-long_readings_section = soup.find('div', class_='longer-readings').find('div', class_='scrollable-content')
+article_template = soup.find('div', attrs={'class': 'columns'})
+if not article_template:
+    raise ValueError("Article template not found in the HTML file.")
 
-if not news_section or not long_readings_section:
-    raise ValueError("❌ News or Longer Readings section not found in the HTML template.")
+html_start = str(soup).split(str(article_template))[0].replace('\n', '')
+html_end = str(soup).split(str(article_template))[1].replace('\n', '')
 
-# News Section (Includes all newsletters & articles)
-for article in news_previews:
-    article_entry = BeautifulSoup(f"""
-    <div class="columns">
-        <div class="column">
-            <h1 class="title">{article['title']}</h1>
-            <p class="subtitle">{article['subtitle']}...</p>
-            <a class="link" href="{article['url']}">Read more</a>
-        </div>
-    </div>
-    """, "html.parser")
+newsletter_content = ""
+for article in previews:
+    try:
+        # Update title
+        title = article_template.find('h1')
+        if title:
+            title.string = article['title'][:300]
 
-    news_section.append(article_entry)
+        # Update subtitle
+        subtitle = article_template.find('p')
+        if subtitle:
+            subtitle.string = article['subtitle'][:300] + "..."
 
-# Longer Readings Section (Academic Papers)
-for article in academic_previews:
-    article_entry = BeautifulSoup(f"""
-    <div class="columns">
-        <div class="column">
-            <h1 class="title">{article['title']}</h1>
-            <p class="subtitle">{article['subtitle']}...</p>
-            <a class="link" href="{article['url']}">Read more</a>
-        </div>
-    </div>
-    """, "html.parser")
+        # Update link
+        link = article_template.find('a')
+        if link:
+            link['href'] = article['url']
+            link.string = "Read more"
 
-    long_readings_section.append(article_entry)
+        newsletter_content += str(article_template).replace('\n', '')
 
-# Save Updated HTML
+    except Exception as e:
+        print(f"⚠️ Error updating article template: {e}")
+
+email_content = html_start + newsletter_content + html_end
+html_output = BeautifulSoup(email_content, "html.parser").prettify()
+
+# Ensure 'src' folder exists
 output_folder = "/Users/ayseasliilhan/Desktop/newsletter/fia-newsletter"
 os.makedirs(output_folder, exist_ok=True)
 output_file = os.path.join(output_folder, "index.html")
 
 with open(output_file, "w", encoding="utf-8") as file:
-    file.write(str(soup))
+    file.write(html_output)
 
 print(f"✅ HTML saved successfully: {output_file}")
 
@@ -211,4 +194,3 @@ with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
     server.sendmail(sender_email, receiver_email, message.as_string())
 
 print("✅ Email sent successfully!")
-

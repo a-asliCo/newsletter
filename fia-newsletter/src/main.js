@@ -96,50 +96,32 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const searchResults = document.getElementById("search-results");
-    const allArticles = document.querySelectorAll(".news-feed .columns, .longer-readings .columns");
-    let searchCount = parseInt(localStorage.getItem("searchCount")) || 0;
+    const articles = document.querySelectorAll(".news-feed .columns");
 
-    // Function to filter articles based on search input
-    function searchArticles() {
-        const query = searchInput.value.toLowerCase().trim();
+    searchInput.addEventListener("input", function () {
+        const query = searchInput.value.toLowerCase();
+
         searchResults.innerHTML = ""; // Clear previous results
 
-        if (query === "") {
-            searchResults.style.display = "none";
-            return;
-        }
+        articles.forEach(article => {
+            const title = article.querySelector(".title")?.textContent.toLowerCase() || "";
+            const subtitle = article.querySelector(".subtitle")?.textContent.toLowerCase() || "";
+            const link = article.querySelector(".link")?.href || "#";
 
-        let foundArticles = 0;
-
-        allArticles.forEach(article => {
-            const title = article.querySelector(".title")?.textContent.toLowerCase();
-            const subtitle = article.querySelector(".subtitle")?.textContent.toLowerCase();
-            const link = article.querySelector("a")?.href;
-
-            if ((title && title.includes(query)) || (subtitle && subtitle.includes(query))) {
-                const resultEntry = document.createElement("div");
-                resultEntry.classList.add("search-result-item");
-                resultEntry.innerHTML = `
-                    <h3>${article.querySelector(".title").textContent}</h3>
-                    <p>${article.querySelector(".subtitle").textContent}</p>
-                    <a href="${link}" target="_blank">Read more</a>
+            if (title.includes(query) || subtitle.includes(query)) {
+                const resultItem = document.createElement("div");
+                resultItem.classList.add("search-result-item");
+                resultItem.innerHTML = `
+                    <h3 class="title search-highlight">${title}</h3>
+                    <p class="subtitle search-highlight">${subtitle}</p>
+                    <a href="${link}" class="link">Read more →</a>
                 `;
-                searchResults.appendChild(resultEntry);
-                foundArticles++;
+                searchResults.appendChild(resultItem);
             }
         });
 
-        if (foundArticles === 0) {
-            searchResults.innerHTML = "<p>No matching articles found.</p>";
+        if (!searchResults.innerHTML) {
+            searchResults.innerHTML = "<p style='color:white;'>No matching articles found.</p>";
         }
-
-        searchResults.style.display = "block";
-
-        // Update search count
-        searchCount++;
-        localStorage.setItem("searchCount", searchCount);
-        document.getElementById("search-count").innerText = searchCount;
-    }
-
-    searchInput.addEventListener("input", searchArticles);
+    });
 });
