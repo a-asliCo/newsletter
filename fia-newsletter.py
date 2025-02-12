@@ -92,11 +92,9 @@ def get_previews(urls):
             data = requests.get(article, headers=headers, timeout=10)
             soup = BeautifulSoup(data.content, 'html.parser')
 
-            # Extract title
             title_tag = soup.find(['h1', 'h2', 'h3'])
             title = title_tag.text.strip() if title_tag else "No Title"
 
-            # Extract subtitle
             subtitle_tag = soup.find(['h3', 'h4', 'p'])
             subtitle = subtitle_tag.text.strip() if subtitle_tag else "No Subtitle"
 
@@ -213,3 +211,4 @@ with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
     server.sendmail(sender_email, receiver_email, message.as_string())
 
 print("✅ Email sent successfully!")
+
