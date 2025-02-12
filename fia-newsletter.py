@@ -8,32 +8,61 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # -----------------------------------------------
-# Scraping Setup
+# Scraping Setup - List of Websites
 # -----------------------------------------------
-keywords= ['ai','artificial intelligence','fashion','retail','creative technology', 'fashion innovation', 'ml', 'machine learning', 'generative ai', 'gan ai', 'comfy ui', '2d to 3d', 'text to 3d', 'technology conferences', 'garment', 'clothing', 'technology and design', 'fashion design', 'creative computing' ]
-base_url = "https://heatherbcooper.substack.com/ "
+websites = [
+    "https://theresanaiforthat.com/s/fashion/",
+    "https://bilawal.ai/",
+    "https://heatherbcooper.substack.com/",
+    "https://www.spatialintelligence.ai/p/2025-the-year-imagination-becomes",  # Blocked
+    "https://civitai.com/articles",
+    "https://www.thecurrent.com/sections/retail",
+    "https://www.businessoffashion.com/topics/technology/",
+    "https://fashnerd.com/",
+    "https://www.glossy.co/fashion/",
+    "https://www.wgsn.com/en/blog",
+    "https://blog.wideeyes.ai/category/technology/",
+    "https://wwd.com/business-news/technology/",
+]
+
 headers = {'User-Agent': 'Mozilla/5.0'}
 
-response = requests.get(base_url, headers=headers)
-soup = BeautifulSoup(response.content, 'html.parser')
+# Keywords for filtering relevant articles
+keywords = [
+    'ai', 'artificial intelligence', 'fashion', 'retail', 'creative technology',
+    'fashion innovation', 'ml', 'machine learning', 'generative ai', 'gan ai',
+    'comfy ui', '2d to 3d', 'text to 3d', 'technology conferences', 'garment',
+    'clothing', 'technology and design', 'fashion design', 'creative computing'
+]
 
+# -----------------------------------------------
+# Scraping Process
+# -----------------------------------------------
 urls = []
 
-for link in soup.find_all('a', href=True):
-    href = link['href']
+for website in websites:
+    try:
+        response = requests.get(website, headers=headers, timeout=10)
+        soup = BeautifulSoup(response.content, 'html.parser')
 
-    if href.endswith('/comments'):
-        continue
+        for link in soup.find_all('a', href=True):
+            href = link['href']
 
-    if any(re.search(rf'\b{re.escape(keyword)}\b', href, re.IGNORECASE) for keyword in keywords):
-        if href.startswith('http'):
-            urls.append(href)
-        else:
-            urls.append(base_url.rstrip('/') + '/' + href.lstrip('/'))
+            # Ignore comments links or unrelated pages
+            if href.endswith('/comments'):
+                continue
 
+            # Check if the URL contains any of the keywords
+            if any(re.search(rf'\b{re.escape(keyword)}\b', href, re.IGNORECASE) for keyword in keywords):
+                full_url = href if href.startswith('http') else website.rstrip('/') + '/' + href.lstrip('/')
+                urls.append(full_url)
+
+    except Exception as e:
+        print(f"⚠️ Error scraping {website}: {e}")
+
+# Remove duplicate URLs
 urls = list(set(urls))
-
-print(urls)
+print(f"✅ Found {len(urls)} articles.")
 
 # -----------------------------------------------
 # Article Previews
@@ -46,15 +75,15 @@ for article in tqdm(urls, desc="Scraping articles"):
         soup = BeautifulSoup(data.content, 'html.parser')
 
         # Extract title
-        title_tag = soup.find('h1')
+        title_tag = soup.find(['h1', 'h2', 'h3'])
         title = title_tag.text.strip() if title_tag else "No Title"
 
         # Extract subtitle
-        subtitle_tag = soup.find('h3')
+        subtitle_tag = soup.find(['h3', 'h4', 'p'])
         subtitle = subtitle_tag.text.strip() if subtitle_tag else "No Subtitle"
 
         # Locate article content area to extract relevant images
-        content_divs = soup.find_all(['div', 'article'], class_=re.compile(r'(content|article|post|entry)', re.IGNORECASE))
+        content_divs = soup.find_all(['div', 'article', 'section'], class_=re.compile(r'(content|article|post|entry)', re.IGNORECASE))
 
         image = None
         for div in content_divs:
@@ -74,7 +103,7 @@ for article in tqdm(urls, desc="Scraping articles"):
         })
 
     except Exception as e:
-        print(f"Error processing {article}: {e}")
+        print(f"⚠️ Error processing {article}: {e}")
 
 # -----------------------------------------------
 # HTML Generation
@@ -121,7 +150,7 @@ for article in previews:
         newsletter_content += str(article_template).replace('\n', '')
 
     except Exception as e:
-        print(f"Error updating article template: {e}")
+        print(f"⚠️ Error updating article template: {e}")
 
 email_content = html_start + newsletter_content + html_end
 html_output = BeautifulSoup(email_content, "html.parser").prettify()
@@ -168,10 +197,6 @@ html = f"""
         <p>
             <a href="{newsletter_link}" style="font-size: 16px; text-decoration: none; color: #007BFF; font-weight: bold;">
                 🔗 Read the Newsletter ➡️
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
             </a>
         </p>
         <p>Stay inspired!<br>
