@@ -178,7 +178,7 @@ print(f"✅ HTML saved successfully: {output_file}")
 # Email Sending
 # -----------------------------------------------
 sender_email = "fia.newsletter.2025@gmail.com"
-receiver_email = "asli.ilhan@arts.ac.uk"
+receiver_email = ["asli.ilhan@arts.ac.uk", "l.chatterton@fashion.arts.ac.uk", "m.robertsislam@fashion.arts.ac.uk", "c.kazantzis@arts.ac.uk", "e.cies@fashion.arts.ac.uk", "t.ellins@arts.ac.uk"]
 password = "kuvx ouol tnem relg"
 
 newsletter_link = "https://fia-newsletter.vercel.app"
