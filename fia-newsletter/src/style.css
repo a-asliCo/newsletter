@@ -537,4 +537,12 @@ body, html {
     font-size: 14px;
     padding: 10px;
   }
+
+  .engagement-box {
+    display: none;
+  }
+
+  .community {
+    display: none;
+  }
 }
