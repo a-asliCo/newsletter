@@ -100,10 +100,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     searchInput.addEventListener("input", function () {
         const query = searchInput.value.toLowerCase();
-
         searchResults.innerHTML = ""; // Clear previous results
 
+        let count = 0; // Counter to track number of displayed results
+
         articles.forEach(article => {
+            if (count >= 5) return; // Stop after showing 5 results
+
             const title = article.querySelector(".title")?.textContent.toLowerCase() || "";
             const subtitle = article.querySelector(".subtitle")?.textContent.toLowerCase() || "";
             const link = article.querySelector(".link")?.href || "#";
@@ -117,10 +120,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     <a href="${link}" class="link">Read more →</a>
                 `;
                 searchResults.appendChild(resultItem);
+                count++; // Increment the counter
             }
         });
 
-        if (!searchResults.innerHTML) {
+        if (count === 0) {
             searchResults.innerHTML = "<p style='color:white;'>No matching articles found.</p>";
         }
     });
