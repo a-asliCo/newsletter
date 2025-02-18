@@ -121,7 +121,7 @@ long_readings_section = soup.find('div', class_='longer-readings').find('div', c
 if not news_section or not long_readings_section:
     raise ValueError("❌ News or Longer Readings section not found in the HTML template.")
 
-# News Section (Includes all newsletters & articles)
+# News Section
 for article in news_previews:
     article_entry = BeautifulSoup(f"""
     <div class="columns">
@@ -136,33 +136,18 @@ for article in news_previews:
     news_section.append(article_entry)
 
 # Longer Readings Section (Research Papers)
-if academic_previews:
-    for article in academic_previews:
-        article_entry = BeautifulSoup(f"""
-        <div class="columns">
-            <div class="column">
-                <h1 class="title">{article['title']}</h1>
-                <p class="subtitle">{article['subtitle']}...</p>
-                <a class="link" href="{article['url']}">Read more</a>
-            </div>
+for article in academic_previews:
+    article_entry = BeautifulSoup(f"""
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">{article['title']}</h1>
+            <p class="subtitle">{article['subtitle']}...</p>
+            <a class="link" href="{article['url']}">Read more</a>
         </div>
-        """, "html.parser")
+    </div>
+    """, "html.parser")
 
-        long_readings_section.append(article_entry)
-else:
-    # If no research papers were found, show sources instead
-    for url in academic_sources:
-        article_entry = BeautifulSoup(f"""
-        <div class="columns">
-            <div class="column">
-                <h1 class="title">Research Source</h1>
-                <p class="subtitle">This source provides research articles, but no recent articles were found in this scrape.</p>
-                <a class="link" href="{url}">Visit Source</a>
-            </div>
-        </div>
-        """, "html.parser")
-
-        long_readings_section.append(article_entry)
+    long_readings_section.append(article_entry)
 
 # Save Updated HTML
 output_folder = "/Users/ayseasliilhan/Desktop/newsletter/fia-newsletter"
@@ -175,10 +160,14 @@ with open(output_file, "w", encoding="utf-8") as file:
 print(f"✅ HTML saved successfully: {output_file}")
 
 # -----------------------------------------------
-# Email Sending
+# Email Sending (Fixed to Include All Recipients)
 # -----------------------------------------------
 sender_email = "fia.newsletter.2025@gmail.com"
-receiver_email = ["asli.ilhan@arts.ac.uk", "l.chatterton@fashion.arts.ac.uk", "m.robertsislam@fashion.arts.ac.uk", "c.kazantzis@arts.ac.uk", "e.cies@fashion.arts.ac.uk", "t.ellins@arts.ac.uk"]
+receiver_email = [
+    "asli.ilhan@arts.ac.uk", "l.chatterton@fashion.arts.ac.uk",
+    "m.robertsislam@fashion.arts.ac.uk", "c.kazantzis@arts.ac.uk",
+    "e.cies@fashion.arts.ac.uk", "t.ellins@arts.ac.uk"
+]
 password = "kuvx ouol tnem relg"
 
 newsletter_link = "https://fia-newsletter.vercel.app"
@@ -186,17 +175,7 @@ newsletter_link = "https://fia-newsletter.vercel.app"
 message = MIMEMultipart("alternative")
 message["Subject"] = "🚀 Our Newsletter is Updated!"
 message["From"] = sender_email
-message["To"] = receiver_email
-
-text = f"""Hey Team,
-Our latest newsletter is now available. Click below to read it:
-
-🔗 {newsletter_link} ➡️
-
-Stay inspired!
-
-The FIA's Newsletter RoBot 🤖
-"""
+message["To"] = ", ".join(receiver_email)  # ✅ FIXED: Ensuring all emails receive the message
 
 html = f"""
 <html>
@@ -208,8 +187,7 @@ html = f"""
                 🔗 Read the Newsletter ➡️
             </a>
         </p>
-        <p>Stay inspired!<br>
-        <br>The FIA's Newsletter RoBot 🤖</p>
+        <p>Stay inspired!<br><br>The FIA's Newsletter RoBot 🤖</p>
     </body>
 </html>
 """
@@ -221,4 +199,4 @@ with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
     server.login(sender_email, password)
     server.sendmail(sender_email, receiver_email, message.as_string())
 
-print("✅ Email sent successfully!")
+print("✅ Email sent successfully to all recipients!")
